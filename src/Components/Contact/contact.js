@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import './contact.css';
 import walmart from '../../assets/walmart.png';
 import adobe from '..//../assets/adobe.png';
@@ -8,8 +8,29 @@ import fb from '..//..//assets/facebook-icon.png';
 import ig from '../..//assets/instagram.png';
 import x from '..//..//assets/twitter.png';
 import yt from '..//..//assets/youtube.png';
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
+    const form = useRef();
+    const sendEmail = (e) => {
+        e.preventDefault();
+    
+        emailjs
+          .sendForm('service_by0iy8q', 'template_porgg67', form.current, {
+            publicKey: 'zYAs6IVGDZKpwmpG7',
+          })
+          .then(
+            () => {
+              console.log('SUCCESS!');
+              e.target.reset();
+              alert("Message sent!");
+            },
+            (error) => {
+              console.log('FAILED...', error.text);
+            },
+          );
+      };
+
   return (
     <section id='contactpage'>
         <div className='clients'>
@@ -27,9 +48,9 @@ const Contact = () => {
             <div className='contact'>
                 <h1 id='contacttitle'>Contact Me</h1>
                 <span className='contactdescription'>Please fill out the following form to discuss any work opportunities</span>
-                <form className='contactform'>
-                        <input type='text' className='name' placeholder='Your name' />
-                        <input type='email' className='email' placeholder='Your Email'/>
+                <form className='contactform' ref={form} onSubmit={sendEmail} >
+                        <input type='text' className='name' placeholder='Your name' name='your_name' />
+                        <input type='email' className='email' placeholder='Your Email' name='your_email'/>
                         <textarea className='msg' name='message' rows='5' placeholder='Your Message'></textarea>
                         <button type='submit' value='send' className='submitbtn' >Submit</button>
                         <div className='links'>
